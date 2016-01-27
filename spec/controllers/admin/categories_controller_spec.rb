@@ -15,6 +15,25 @@ describe Admin::CategoriesController do
     get :index
     assert_response :redirect, :action => 'index'
   end
+  
+  describe "viewing categories" do
+    let!(:cat) { Factory.create(:category) }
+    
+    before do
+      get :new
+      assert_response :success
+    end
+    
+    it "should render template new" do
+      assert_template 'new'
+      assert_tag :tag => "table",
+        :attributes => { :id => "category_container" }
+    end
+    
+    it "should display category in category list" do
+      assert_select '#category_container', %r(#{ cat.name })
+    end
+  end
 
   describe "test_edit" do
     before(:each) do

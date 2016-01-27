@@ -1,0 +1,10 @@
+Given /^the following categories exist:$/ do |categories_table|
+  # table is a Cucumber::Ast::Table
+  categories_table.hashes.each do |category|
+    Category.create!({name: category[:name], position: category[:position], permalink: category[:permalink]})
+  end
+end
+
+Then /^I should see "(.*?)" header$/ do |header_text|
+  page.should have_css '.page-header h2', text: 'Categories'
+end
