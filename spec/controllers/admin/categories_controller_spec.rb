@@ -17,7 +17,7 @@ describe Admin::CategoriesController do
   end
   
   describe "viewing categories" do
-    let!(:cat) { Factory.create(:category) }
+    let!(:category) { Factory.create(:category) }
     
     before do
       get :new
@@ -31,7 +31,19 @@ describe Admin::CategoriesController do
     end
     
     it "should display category in category list" do
-      assert_select '#category_container', %r(#{ cat.name })
+      assert_select '#category_container', %r(#{ category.name })
+    end
+  end
+  
+  describe "creating categories" do
+    before do
+      get :new
+      assert_response :success
+    end
+    
+    it "successfully creates category" do
+      post :new, category: { name: 'Category Test 2' }
+      expect(flash[:notice]).to eq "Category was successfully saved."
     end
   end
 
