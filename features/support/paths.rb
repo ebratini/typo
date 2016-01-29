@@ -18,7 +18,13 @@ module NavigationHelpers
     when /^the new article page$/
       '/admin/content/new'
     when /^the admin dashboard page$/
-      '/admin'
+      admin_dashboard_path
+    when /^the admin categories page$/
+      admin_categories_path
+    when /^the "(.*)" action page for category "(.*)"$/
+      category_id = Category.find(:first, conditions: ['name = ?', $2]).id
+      "#{ admin_categories_path }/#{ $1 }/#{ category_id }"
+      
 
     # Add more mappings here.
     # Here is an example that pulls values out of the Regexp:
