@@ -20,7 +20,7 @@ module NavigationHelpers
     when /^the admin dashboard page$/
       admin_dashboard_path
     when /^the admin categories page$/
-      admin_categories_path
+      admin_categories_path + '/new'
     when /^the "(.*)" action page for category "(.*)"$/
       category_id = Category.find(:first, conditions: ['name = ?', $2]).id
       "#{ admin_categories_path }/#{ $1 }/#{ category_id }"

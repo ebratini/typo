@@ -15,7 +15,8 @@ Feature: viewing categories
   Scenario: successfully view category list
     Given I am on the admin dashboard page
     When  I follow "Categories"
-    Then  I should see "Categories" header
+    Then  I should be on the admin categories page
+    And   I should see "Categories" header
     And   I should see "cat1"
     And   I should see "cat2"
     
