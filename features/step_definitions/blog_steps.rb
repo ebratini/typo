@@ -6,5 +6,5 @@ Given /^the following categories exist:$/ do |categories_table|
 end
 
 Then /^I should see "(.*?)" header$/ do |header_text|
-  page.should have_css '.page-header h2', text: 'Categories'
+  page.should have_css '.page-header', text: header_text
 end
