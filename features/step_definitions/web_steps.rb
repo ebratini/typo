@@ -41,6 +41,14 @@ Given /^the blog is set up$/ do
                 :profile_id => 1,
                 :name => 'admin',
                 :state => 'active'})
+                
+  # non admin user setup
+  User.create!({:login => 'noadmin',
+                :password => 'aaaaaaaa',
+                :email => 'noadmin@snow.com',
+                :profile_id => 2,
+                :name => 'noadmin',
+                :state => 'active'})
 end
 
 And /^I am logged into the admin panel$/ do

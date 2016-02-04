@@ -1,0 +1,40 @@
+Given /^the following articles exist:$/ do |table|
+  # table is a Cucumber::Ast::Table
+  Article.create! table.hashes
+  # table.hashes.each do |article|
+  #   Factory.create(:article, article)
+  # end
+end
+
+Given /^I login as a regular user$/ do
+  # regular_user = FactoryGirl.create(:user)
+  visit '/accounts/login'
+  fill_in 'user_login', with: 'noadmin'
+  fill_in 'user_password', with: 'aaaaaaaa'
+  click_button 'Login'
+  if page.respond_to? :should
+    page.should have_content('Login successful')
+  else
+    assert page.has_content?('Login successful')
+  end
+end
+
+Given /^I login as an admin user$/ do
+  # admin_profile = FactoryGirl.create(:profile_admin)
+  # admin_user = FactoryGirl.create(:user, profile: admin_profile)
+  
+  visit '/accounts/login'
+  fill_in 'user_login', with: 'admin'
+  fill_in 'user_password', with: 'aaaaaaaa'
+  click_button 'Login'
+  if page.respond_to? :should
+    page.should have_content('Login successful')
+  else
+    assert page.has_content?('Login successful')
+  end
+end
+
+Then /^the article "(.*?)" should have body "(.*?)"$/ do |title, body|
+  article = Article.find_by_title title
+  expect(article.body).eq body
+end
