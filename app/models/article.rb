@@ -420,10 +420,13 @@ class Article < Content
   
   def merge_with(article_id)
     raise Article::MergeError, 'Invalid article id provided.' unless article_id.to_s =~ /^\d+$/
-    raise Article::MergeError, 'Cannot merge itself.' if self.id == article_id.to_i
+    raise Article::MergeError, 'Cannot merge itself.' if self.id == article_id
     begin
+      
       mergee_article = Article.find(article_id.to_i)
-      merged_article = Article.create!(title: self.title, body: "#{ self.body } #{ mergee_article.body }")
+      
+      newbody = self.body + ' ' + mergee_article.body
+      merged_article = Article.create!(title: self.title, body: newbody)
       
       # moving comments
       update_article_reference = ['article_id = ?', merged_article.id]
