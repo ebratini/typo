@@ -26,7 +26,9 @@ module NavigationHelpers
       "#{ admin_categories_path }/#{ $1 }/#{ category_id }"
     when /^the edit article page for "(.*)"$/
       "/admin/content/edit/#{ Article.find(:first, conditions: ['title = ?', $1]).id }"
-      
+    when /^the comments page for article "(.*)"$/
+      "/admin/feedback/article/#{ Article.find_by_title($1).id }"
+      # "/comments?article_id=#{ Article.find_by_title($1).id }"
 
     # Add more mappings here.
     # Here is an example that pulls values out of the Regexp:

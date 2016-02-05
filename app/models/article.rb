@@ -423,12 +423,17 @@ class Article < Content
     raise Article::MergeError, 'Cannot merge itself.' if article_id.to_i == self.id.to_i
     begin
       mergee_article = Article.find(article_id.to_i)
-      merged_article = Article.create(title: self.title, body: self.body + ' ' + mergee_article.body)
+      
+      merged_article = Article.new(title: self.title, body: self.body + ' ' + mergee_article.body)
+      [self.comments, mergee_article.comments].each do |comments|
+        merged_article.comments << comments
+      end
+      merged_article.save!
       
       # moving comments
-      update_article_reference = ['article_id = ?', merged_article.id]
-      self.comments.update_all update_article_reference
-      mergee_article.comments.update_all update_article_reference
+      # update_article_reference = ['article_id = ?', merged_article.id]
+      # self.comments.update_all update_article_reference
+      # mergee_article.comments.update_all update_article_reference
       
       merged_article
     rescue ActiveRecord::RecordNotFound

@@ -9,6 +9,11 @@ Feature: merging articles
     | id | title          | body  |
     | 3  | test article   | lorem |
     | 4  | test article 2 | ipsum |
+    
+    And the following comments exist
+    | article_id | author | body              |
+    | 3          | joe    | comment1 4 atcl 1 |
+    | 4          | doe    | comment2 4 atcl 2 |
   
   Scenario: non-admin users cannot merge articles
     Given I login as a regular user
@@ -26,4 +31,11 @@ Feature: merging articles
     And   I fill in "merge_with" with "4"
     And   I press "Merge"
     Then  I should see "Article successfully merged"
-    And   the merged article "test article" should have body "lorem ipsum"
+    And   I should see "lorem" before "ipsum"
+    
+  Scenario: comments should be transferrered after article merge
+    Given  I login as an admin user
+    When   I merge articles "test article" and "test article 2"
+    And    I go to the comments page for article "test article"
+    Then   I should see "comment1 4 atcl 1"
+    And    I should see "comment2 4 atcl 2"

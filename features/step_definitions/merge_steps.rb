@@ -38,3 +38,10 @@ Then /^the merged article "(.*?)" should have body "(.*?)"$/ do |title, body|
   article = Article.find(:first, conditions: ['title = ?', title])
   expect(article.body).to eq body
 end
+
+When /^I merge articles "(.*?)" and "(.*?)"$/ do |a1, a2|
+  visit "/admin/content/edit/#{ Article.find_by_title(a1).id }"
+  fill_in 'merge_with', with: Article.find_by_title(a2).id
+  click_button 'Merge'
+  expect(page.body).to include "Article successfully merged"
+end

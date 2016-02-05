@@ -119,11 +119,11 @@ class Admin::ContentController < Admin::BaseController
         tgt_article = Article.find(params[:id].to_i)
         
         # debugger
-        @mgd_article = tgt_article.merge_with(params[:merge_with])
+        mgd_article = tgt_article.merge_with(params[:merge_with])
         tgt_article.delete
         
         flash[:notice] = "Article successfully merged."
-        redirect_to "/admin/content/edit/#{ @mgd_article.id }"
+        redirect_to "/admin/content/edit/#{ mgd_article.id }"
       rescue ActiveRecord::RecordNotFound, Article::MergeError => me
         flash[:error] = me.message
         redirect_to "/admin/content/edit/#{ params[:id] }"
