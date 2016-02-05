@@ -25,7 +25,7 @@ module NavigationHelpers
       category_id = Category.find(:first, conditions: ['name = ?', $2]).id
       "#{ admin_categories_path }/#{ $1 }/#{ category_id }"
     when /^the edit article page for "(.*)"$/
-      "/admin/content/edit/#{ Article.find_by_title($1).id }"
+      "/admin/content/edit/#{ Article.find(:first, conditions: ['title = ?', $1]).id }"
       
 
     # Add more mappings here.

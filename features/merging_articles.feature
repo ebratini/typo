@@ -7,8 +7,8 @@ Feature: merging articles
     Given the blog is set up
     And the following articles exist:
     | id | title          | body  |
-    | 2  | test article   | lorem |
-    | 3  | test article 2 | ipsum |
+    | 3  | test article   | lorem |
+    | 4  | test article 2 | ipsum |
   
   Scenario: non-admin users cannot merge articles
     Given I login as a regular user
@@ -23,7 +23,7 @@ Feature: merging articles
   Scenario: admin users can successfully merge articles
     Given I login as an admin user
     When  I go to the edit article page for "test article"
-    And   I fill in "merge_with" with "3"
+    And   I fill in "merge_with" with "4"
     And   I press "Merge"
     Then  I should see "Article successfully merged"
     And   the merged article "test article" should have body "lorem ipsum"

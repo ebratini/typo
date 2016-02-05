@@ -1,6 +1,6 @@
 Given /^the following articles exist:$/ do |table|
   # table is a Cucumber::Ast::Table
-  Article.create! table.hashes
+  Article.create table.hashes
   # table.hashes.each do |article|
   #   Factory.create(:article, article)
   # end

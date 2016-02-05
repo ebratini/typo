@@ -5,7 +5,7 @@
   
 <% end %>
 
-<% if current_user.admin? && current_page?("/admin/content/edit/#{ @article.id }") %>
+<% if current_user.admin? && (@article && current_page?("/admin/content/edit/#{ @article.id }")) %>
   <%= form_tag merge_content_path(@article.id) do %>
     <div id='merge_articles'>
       <h3>Merge Articles</h3>

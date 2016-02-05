@@ -632,22 +632,22 @@ describe Article do
   
   describe '#merge_with' do
     context 'with valid article' do
-      before do
-        @article = Article.create!(title: 'article1', body: 'testbdy1')
-        @article2 = Article.create!(title: 'article2', body: 'testbdy2')
-        @comments = [Comment.create!(author: 'auth1', body: 'comment', article_id: @article.id),
-                     Comment.create!(author: 'auth1', body: 'comment', article_id: @article2.id)]
+      before(:each) do
+        @article = Article.create(title: 'article1', body: 'testbdy1')
+        @article2 = Article.create(title: 'article2', body: 'testbdy2')
+        
+        @comments = [Comment.create(author: 'auth1', body: 'comment', article_id: @article.id),
+                     Comment.create(author: 'auth1', body: 'comment', article_id: @article2.id)]
       end
       
       it 'new merged article should preserve either target or mergee title' do
-        titles = [@article.title, @article2.title]
         merged_article = @article.merge_with(@article2.id)
-        expect(titles).to include merged_article.title
+        expect(merged_article.title).to eq 'article1'
       end
       
       it 'new merged article should contain the text of both previous articles' do
         merged_article = @article.merge_with(@article2.id)
-        expect(merged_article.body).to match /#{ @article.body }.*#{ @article2.body }/m
+        expect(merged_article.body).to match /testbdy1.*testbdy2/m
       end
       
       it 'new merged article should preserve comments belonging to merging articles' do
@@ -657,8 +657,8 @@ describe Article do
     end
     
     context 'with invalid article' do
-      before do
-        @article = Article.create!(title: 'artt', body: 'testbody')
+      before(:each) do
+        @article = Article.create(title: 'artt', body: 'testbody')
       end
       
       it 'should raise exception when invalid id provided' do
