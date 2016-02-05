@@ -633,14 +633,10 @@ describe Article do
   describe '#merge_with' do
     context 'with valid article' do
       before do
-        # @article, @article2 = Factory.create(:article), Factory.create(:article)
-        @article = Article.create!(title: 'article1', body: 'lorem')
-        @article2 = Article.create!(title: 'article2', body: 'ipsum')
-        
-        # 2.times { Factory.create(:comment, article: @article) }
-        # 2.times { Factory.create(:comment, article: @article2) }
-        2.times { Comment.create!(author: 'auth1', body: 'comment', article_id: @article.id) }
-        2.times { Comment.create!(author: 'auth1', body: 'comment', article_id: @article2.id) }
+        @article = Article.create!(title: 'article1', body: 'testbdy1')
+        @article2 = Article.create!(title: 'article2', body: 'testbdy2')
+        @comments = [Comment.create!(author: 'auth1', body: 'comment', article_id: @article.id),
+                     Comment.create!(author: 'auth1', body: 'comment', article_id: @article2.id)]
       end
       
       it 'new merged article should preserve either target or mergee title' do
@@ -656,14 +652,13 @@ describe Article do
       
       it 'new merged article should preserve comments belonging to merging articles' do
         merged_article = @article.merge_with(@article2.id)
-        expect(merged_article.comments.size).to eq 4
+        expect(merged_article.comments.size).to eq @comments.size
       end
     end
     
     context 'with invalid article' do
       before do
-        # @article = Factory.create(:article)
-        @article = Article.create!(title: 'article', body: 'lorem')
+        @article = Article.create!(title: 'artt', body: 'testbody')
       end
       
       it 'should raise exception when invalid id provided' do
@@ -683,7 +678,8 @@ describe Article do
       
       it 'should raise exception when trying to merge itself' do
         expect {
-          @article.merge_with(@article.id)
+          id = @article.id
+          @article.merge_with(id)
         }.to raise_error(Article::MergeError, /cannot merge itself/i)
       end
     end
