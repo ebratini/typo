@@ -34,7 +34,7 @@ Given /^I login as an admin user$/ do
   end
 end
 
-Then /^the article "(.*?)" should have body "(.*?)"$/ do |title, body|
-  article = Article.find_by_title title
-  expect(article.body).eq body
+Then /^the merged article "(.*?)" should have body "(.*?)"$/ do |title, body|
+  article = Article.find(:first, conditions: ['id != ? AND title = ?', 2, title])
+  expect(article.body).to eq body
 end

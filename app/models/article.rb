@@ -3,6 +3,8 @@ require 'uri'
 require 'net/http'
 
 class Article < Content
+  class Article::MergeError < StandardError ; end
+    
   include TypoGuid
   include ConfigManager
 
@@ -414,6 +416,24 @@ class Article < Content
 
   def access_by?(user)
     user.admin? || user_id == user.id
+  end
+  
+  def merge_with(article_id)
+    raise Article::MergeError, 'Invalid article id provided.' unless article_id.to_s =~ /^\d+$/
+    raise Article::MergeError, 'Cannot merge itself.' if self.id == article_id.to_i
+    begin
+      mergee_article = Article.find(article_id.to_i)
+      merged_article = Article.create!(title: self.title, body: "#{ self.body } #{ mergee_article.body }")
+      
+      # moving comments
+      update_article_reference = ['article_id = ?', merged_article.id]
+      self.comments.update_all update_article_reference
+      mergee_article.comments.update_all update_article_reference
+      
+      merged_article.reload
+    rescue ActiveRecord::RecordNotFound
+      raise Article::MergeError, 'Mergee article not found.'
+    end
   end
 
   protected

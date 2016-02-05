@@ -112,6 +112,24 @@ class Admin::ContentController < Admin::BaseController
     end
     render :text => nil
   end
+  
+  def merge
+    if current_user.admin?
+      begin
+        t_article = Article.find(params[:id].to_i)
+        @article = t_article.merge_with(params[:merge_with])
+        
+        flash[:notice] = "Article successfully merged."
+        redirect_to "/admin/content/edit/#{ merged_article.id }"
+      rescue ActiveRecord::RecordNotFound, Article::MergeError => me
+        flash[:error] = me.message
+        redirect_to "/admin/content/edit/#{ params[:id] }"
+      end
+    else
+      flash[:error] = 'You\'re not allowed to do that.'
+      redirect_to action: :index
+    end
+  end
 
   protected
 

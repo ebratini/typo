@@ -24,7 +24,7 @@ module NavigationHelpers
     when /^the "(.*)" action page for category "(.*)"$/
       category_id = Category.find(:first, conditions: ['name = ?', $2]).id
       "#{ admin_categories_path }/#{ $1 }/#{ category_id }"
-    when /^the article page for "(.*)"$/
+    when /^the edit article page for "(.*)"$/
       "/admin/content/edit/#{ Article.find_by_title($1).id }"
       
 

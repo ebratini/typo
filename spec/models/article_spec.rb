@@ -628,7 +628,65 @@ describe Article do
         article.should be == already_exist_article
       end
     end
-
+  end
+  
+  describe '#merge_with' do
+    context 'with valid article' do
+      before do
+        # @article, @article2 = Factory.create(:article), Factory.create(:article)
+        @article = Article.create!(title: 'article1', body: 'lorem')
+        @article2 = Article.create!(title: 'article2', body: 'ipsum')
+        
+        # 2.times { Factory.create(:comment, article: @article) }
+        # 2.times { Factory.create(:comment, article: @article2) }
+        2.times { Comment.create!(author: 'auth1', body: 'comment', article_id: @article.id) }
+        2.times { Comment.create!(author: 'auth1', body: 'comment', article_id: @article2.id) }
+      end
+      
+      it 'new merged article should preserve either target or mergee title' do
+        titles = [@article.title, @article2.title]
+        merged_article = @article.merge_with(@article2.id)
+        expect(titles).to include merged_article.title
+      end
+      
+      it 'new merged article should contain the text of both previous articles' do
+        merged_article = @article.merge_with(@article2.id)
+        expect(merged_article.body).to match /#{ @article.body }.*#{ @article2.body }/m
+      end
+      
+      it 'new merged article should preserve comments belonging to merging articles' do
+        merged_article = @article.merge_with(@article2.id)
+        expect(merged_article.comments.size).to eq 4
+      end
+    end
+    
+    context 'with invalid article' do
+      before do
+        # @article = Factory.create(:article)
+        @article = Article.create!(title: 'article', body: 'lorem')
+      end
+      
+      it 'should raise exception when invalid id provided' do
+        [' ', 'ads', '12x3'].each do |invalid_id|
+          expect {
+            @article.merge_with(invalid_id)
+          }.to raise_error(Article::MergeError, /invalid article id/i)
+        end
+      end
+      
+      it 'should raise exception when non existent mergee article provided' do
+        expect {
+          id = Article.count + 1
+          @article.merge_with(id)
+        }.to raise_error(Article::MergeError, /mergee article not found/i)
+      end
+      
+      it 'should raise exception when trying to merge itself' do
+        expect {
+          @article.merge_with(@article.id)
+        }.to raise_error(Article::MergeError, /cannot merge itself/i)
+      end
+    end
   end
 end
 
