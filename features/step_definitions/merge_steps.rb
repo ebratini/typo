@@ -35,6 +35,11 @@ Given /^I login as an admin user$/ do
 end
 
 Then /^the merged article "(.*?)" should have body "(.*?)"$/ do |title, body|
-  article = Article.find(:first, conditions: ['id != ? AND title = ?', 2, title])
+  article = Article.find(:first, conditions: ['title = ?', title])
   expect(article.body).to eq body
+end
+
+Then /^the merged article "(.*?)" should have "(.*?)" before "(.*?)" in its body$/ do |title, b1, b2|
+  article = Article.find(:first, conditions: ['title = ?', title])
+  expect(article.body).to match /#{b1}.*#{b2}/m
 end

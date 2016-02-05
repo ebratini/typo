@@ -656,6 +656,7 @@ describe Article do
       
       it 'new merged article should preserve comments belonging to merging articles' do
         merged_article = @article.merge_with(@article2.id)
+        @article.destroy
         expect(merged_article.comments.size).to eq 4
       end
     end
