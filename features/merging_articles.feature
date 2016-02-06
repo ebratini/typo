@@ -17,7 +17,7 @@ Feature: merging articles
   
   Scenario: non-admin users cannot merge articles
     Given I login as a regular user
-    When  I go to the edit article page for "test article"
+    When  I go to the edit page for article "test article"
     Then  I should not see "Merge Articles"
     
   Scenario: merge article form should render only in article's edit page
@@ -27,11 +27,18 @@ Feature: merging articles
   
   Scenario: admin users can successfully merge articles
     Given I login as an admin user
-    When  I go to the edit article page for "test article"
+    When  I go to the edit page for article "test article"
     And   I fill in "merge_with" with "4"
     And   I press "Merge"
-    Then  I should see "Article successfully merged"
-    And   I should see "lorem" before "ipsum"
+    Then  I should see "Article was successfully merged"
+    And   I should see "test article"
+    
+  Scenario: new merged article should have the text of both original articles
+    Given I login as an admin user
+    When  I merge articles "test article" and "test article 2"
+    And   I go to the edit page for article "test article"
+    Then  I should see "lorem"
+    And   I should see "ipsum"
     
   Scenario: comments should be transferrered after article merge
     Given  I login as an admin user

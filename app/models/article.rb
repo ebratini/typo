@@ -424,7 +424,8 @@ class Article < Content
     begin
       mergee_article = Article.find(article_id.to_i)
       
-      merged_article = Article.new(title: self.title, body: self.body + ' ' + mergee_article.body)
+      article_body = self.body + ' ' + mergee_article.body
+      merged_article = Article.new(title: self.title, published: true, body: article_body)
       [self.comments, mergee_article.comments].each do |comments|
         merged_article.comments << comments
       end

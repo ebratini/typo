@@ -43,5 +43,5 @@ When /^I merge articles "(.*?)" and "(.*?)"$/ do |a1, a2|
   visit "/admin/content/edit/#{ Article.find_by_title(a1).id }"
   fill_in 'merge_with', with: Article.find_by_title(a2).id
   click_button 'Merge'
-  expect(page.body).to include "Article successfully merged"
+  expect(page.body).to include "Article was successfully merged"
 end

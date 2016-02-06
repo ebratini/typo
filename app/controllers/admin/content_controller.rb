@@ -117,13 +117,11 @@ class Admin::ContentController < Admin::BaseController
     if current_user.admin?
       begin
         tgt_article = Article.find(params[:id].to_i)
-        
-        # debugger
         mgd_article = tgt_article.merge_with(params[:merge_with])
         tgt_article.delete
         
-        flash[:notice] = "Article successfully merged."
-        redirect_to "/admin/content/edit/#{ mgd_article.id }"
+        params[:id] = mgd_article.id
+        new_or_edit
       rescue ActiveRecord::RecordNotFound, Article::MergeError => me
         flash[:error] = me.message
         redirect_to "/admin/content/edit/#{ params[:id] }"
@@ -168,7 +166,7 @@ class Admin::ContentController < Admin::BaseController
 
     @post_types = PostType.find(:all)
     if request.post?
-      if params[:article][:draft]
+      if params[:article] && params[:article][:draft]
         get_fresh_or_existing_draft_for_article
       else
         if not @article.parent_id.nil?
@@ -188,7 +186,7 @@ class Admin::ContentController < Admin::BaseController
       save_attachments
       
       @article.state = "draft" if @article.draft
-
+      
       if @article.save
         destroy_the_draft unless @article.draft
         set_article_categories
@@ -210,6 +208,8 @@ class Admin::ContentController < Admin::BaseController
       flash[:notice] = _('Article was successfully created')
     when 'edit'
       flash[:notice] = _('Article was successfully updated.')
+    when 'merge'
+      flash[:notice] = _('Article was successfully merged.')
     else
       raise "I don't know how to tidy up action: #{params[:action]}"
     end
