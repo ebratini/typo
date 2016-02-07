@@ -117,14 +117,19 @@ class Admin::ContentController < Admin::BaseController
     if current_user.admin?
       begin
         tgt_article = Article.find(params[:id].to_i)
-        mgd_article = tgt_article.merge_with(params[:merge_with])
+        
+        @article = tgt_article.merge_with(params[:merge_with])
+        set_article_author
+        @article.save!
         
         tgt_article.clear_association_cache
         tgt_article.destroy
         # tgt_article.delete
         
-        params[:id] = mgd_article.id
-        new_or_edit
+        # params[:id] = @article.id
+        # new_or_edit
+        set_the_flash
+        redirect_to :action => 'index'
       rescue ActiveRecord::RecordNotFound, Article::MergeError => me
         flash[:error] = me.message
         redirect_to "/admin/content/edit/#{ params[:id] }"
