@@ -120,8 +120,8 @@ class Admin::ContentController < Admin::BaseController
         mgd_article = tgt_article.merge_with(params[:merge_with])
         
         tgt_article.clear_association_cache
-        # tgt_article.destroy
-        tgt_article.delete
+        tgt_article.destroy
+        # tgt_article.delete
         
         params[:id] = mgd_article.id
         new_or_edit
