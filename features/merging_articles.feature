@@ -38,6 +38,7 @@ Feature: merging articles
     When  I merge articles "test article" and "test article 2"
     Then  I should be on the articles home page
     And   I should see just one single instance of article "test article"
+    And   I should not see "test article 2"
     
   Scenario: new merged article should have the text of both original articles
     Given I login as an admin user
