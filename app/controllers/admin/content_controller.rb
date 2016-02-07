@@ -117,10 +117,15 @@ class Admin::ContentController < Admin::BaseController
     if current_user.admin?
       begin
         tgt_article = Article.find(params[:id].to_i)
+        mw_article = Article.find(params[:merge_with].to_i)
+        
         mgd_article = tgt_article.merge_with(params[:merge_with])
         
         tgt_article.clear_association_cache
         tgt_article.destroy
+        
+        mw_article.clear_association_cache
+        mw_article.destroy
         # tgt_article.delete
         
         params[:id] = mgd_article.id
