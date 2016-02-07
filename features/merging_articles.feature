@@ -6,11 +6,11 @@ Feature: merging articles
   Background:
     Given the blog is set up
     And the following articles exist:
-    | id | title          | body  |
-    | 3  | test article   | lorem |
-    | 4  | test article 2 | ipsum |
+    | id | title          | body  | published |
+    | 3  | test article   | lorem | true      |
+    | 4  | test article 2 | ipsum | true      |
     
-    And the following comments exist
+    And the following comments exist:
     | article_id | author | body              |
     | 3          | joe    | comment1 4 atcl 1 |
     | 4          | doe    | comment2 4 atcl 2 |

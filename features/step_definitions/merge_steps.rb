@@ -6,6 +6,10 @@ Given /^the following articles exist:$/ do |table|
   # end
 end
 
+Given /^the following comments exist:$/ do |table|
+  Comment.create! table.hashes
+end
+
 Given /^I login as a regular user$/ do
   # regular_user = FactoryGirl.create(:user)
   visit '/accounts/login'
