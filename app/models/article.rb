@@ -429,7 +429,7 @@ class Article < Content
       [self.comments, mergee_article.comments].each do |comments|
         merged_article.comments << comments
       end
-      # merged_article.save!
+      merged_article.save!
       
       # moving comments
       # update_article_reference = ['article_id = ?', merged_article.id]
