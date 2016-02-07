@@ -118,7 +118,10 @@ class Admin::ContentController < Admin::BaseController
       begin
         tgt_article = Article.find(params[:id].to_i)
         mgd_article = tgt_article.merge_with(params[:merge_with])
-        tgt_article.delete
+        
+        tgt_article.clear_association_cache
+        tgt_article.destroy
+        # tgt_article.delete
         
         params[:id] = mgd_article.id
         new_or_edit
