@@ -33,6 +33,12 @@ Feature: merging articles
     Then  I should see "Article was successfully merged"
     And   I should see "test article"
     
+  Scenario: should create a single merged article
+    Given I login as an admin user
+    When  I merge articles "test article" and "test article 2"
+    Then  I should be on the articles home page
+    And   I should see just one single instance of article "test article"
+    
   Scenario: new merged article should have the text of both original articles
     Given I login as an admin user
     When  I merge articles "test article" and "test article 2"

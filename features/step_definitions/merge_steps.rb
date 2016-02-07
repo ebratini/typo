@@ -45,3 +45,8 @@ When /^I merge articles "(.*?)" and "(.*?)"$/ do |a1, a2|
   click_button 'Merge'
   expect(page.body).to include "Article was successfully merged"
 end
+
+Then /^I should see just one single instance of article "(.*?)"$/ do |article_title|
+  visit '/admin/content'
+  page.all('a', text: article_title).size.should == 1
+end
