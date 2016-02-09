@@ -124,16 +124,11 @@ class Admin::ContentController < Admin::BaseController
         @article.save!
         
         [tgt_article, mw_article].each do |article|
-          article.clear_association_cache
-          article.destroy
-          # tgt_article.delete
+          article.reload.destroy
         end
         
         set_the_flash
         redirect_to action: :index
-        
-        # params[:id] = mgd_article.id
-        # new_or_edit
       rescue ActiveRecord::RecordNotFound, Article::MergeError => me
         flash[:error] = me.message
         redirect_to "/admin/content/edit/#{ params[:id] }"
